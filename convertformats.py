@@ -8,6 +8,49 @@ import nibabel as nib
 from os.path import join
 
 
+def convert_nii_2_mha(data_filepath, ref_filepath, output_filepath):  # for use for cuda2. orientation should be RAI
+
+    image_type_read = itk.Image[itk.SS, 3]
+    image_type_ref = itk.Image[itk.SS, 3]
+
+    itk_py_converter_read = itk.PyBuffer[image_type_read]
+    itk_py_converter_ref = itk.PyBuffer[image_type_ref]
+
+    reader = itk.ImageFileReader[image_type_read].New()
+    ref = itk.ImageFileReader[image_type_ref].New()
+    # pdb.set_trace()
+    reader.SetFileName(data_filepath)
+    reader.Update()
+
+    ref.SetFileName(ref_filepath)
+    ref.Update()
+
+    out = reader.GetOutput()
+    reference = ref.GetOutput()
+
+    T1 = itk_py_converter_read.GetArrayFromImage(out)
+    T1 = T1[:, ::-1, ::-1]
+    #assert T1.flatten().max == 1
+    #T1 = (T1 / T1.flatten().max()) * 255
+    T1 = np.asarray(T1, dtype=int)
+    image_type_write = itk.Image[itk.SS, 3]
+
+    itk_py_converter_write = itk.PyBuffer[image_type_write]
+    writer = itk.ImageFileWriter[image_type_write].New()
+    writer.SetFileName(output_filepath)
+
+    itk_image = itk_py_converter_write.GetImageFromArray(T1.tolist())
+    itk_image.SetSpacing(reference.GetSpacing())
+    itk_image.SetOrigin([131.1, 132.3, -44.76])
+    # itk_image.SetDirection(reference.GetDirection())
+    writer.SetInput(itk_image.GetPointer())
+    writer.UseCompressionOn()
+    writer.Update()
+    del writer
+    del reader
+    del itk_image
+
+
 def changeheader_mha(data_filepath, ref_filepath, output_filepath):
 
     image_type_read = itk.Image[itk.SS, 3]

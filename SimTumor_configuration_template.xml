@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<tumor-simulation-parameters>
+<dataset-name>%(identifier)s</dataset-name>
+<input-directory>%(input-directory)s</input-directory>
+<output-directory>%(output-directory)s</output-directory>
+
+<deformation-seed>%(seed-path)s</deformation-seed>
+
+<deformation-iterations>%(deformation-iterations)i</deformation-iterations>
+<deformation-initial-pressure>%(deformation-initial-pressure)f</deformation-initial-pressure>
+<deformation-kappa>%(deformation-kappa)f</deformation-kappa>
+
+<infiltration-iterations>%(infiltration-iterations)i</infiltration-iterations>
+<infiltration-time-step>%(infiltration-time-step)f</infiltration-time-step>
+<infiltration-early-time>%(infiltration-early-time)f</infiltration-early-time>
+
+<infiltration-body-force-iterations>%(infiltration-body-force-iterations)i</infiltration-body-force-iterations>
+<infiltration-body-force-coefficient>%(infiltration-body-force-coefficient)f</infiltration-body-force-coefficient>
+
+
+<contrast-enhancement-type>%(tumor-type)s</contrast-enhancement-type>
+</tumor-simulation-parameters>

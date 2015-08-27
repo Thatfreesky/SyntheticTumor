@@ -1,10 +1,8 @@
 import itk
 import numpy
 import numpy as np
-import argparse
 from random import randrange
 from random import shuffle
-from ipdb import set_trace
 import nibabel as nib
 
 
@@ -15,7 +13,7 @@ def load_mask(mask_path):
     return array[:, ::-1, ::-1]
 
 
-def save_file_mask(data_filepath, output_filepath, mask_path):
+def generate_seed_file(data_filepath, output_filepath, mask_path):
 
     image_type = itk.Image[itk.SS, 3]
     itk_py_converter = itk.PyBuffer[image_type]
@@ -27,7 +25,6 @@ def save_file_mask(data_filepath, output_filepath, mask_path):
     mask = load_mask(mask_path)
     # check validity of the mask
     mask = mask > 0  # .1 * mask.flatten().max()
-    set_trace()
     seed = generate_seed_array()
     seed = seed * mask
     while seed.flatten().sum() == 0:
@@ -54,14 +51,14 @@ def generate_seed_array():
         z_seed = randrange(16, 153, 5)
         center = (x_seed, y_seed, z_seed)
         print center
-        radius = randrange(5, 17, 2)
+        radius = randrange(3, 12, 2)
         print radius
         x, y, z = np.ogrid[:D.shape[0], :D.shape[1], :D.shape[2]]
         seed = (x - center[0]) ** 2 + (y - center[1]) ** 2 + (z - center[2]) ** 2 <= radius * radius
         return seed
 
     D = np.zeros((181, 256, 256), dtype=bool)
-    number_seeds = [1, 1, 1, 1, 2, 2, 3]
+    number_seeds = [2, 2, 3, 3, 2, 2, 3]
     shuffle(number_seeds)  # shuufle the list and take the first element
     number_seeds = number_seeds[0]
     for i in range(number_seeds):
@@ -70,7 +67,7 @@ def generate_seed_array():
     D = numpy.array(D, dtype=numpy.short)
     return D
 
-
+'''
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Create mha mask to be used as seed by TumorSim')
@@ -90,3 +87,4 @@ if __name__ == "__main__":
 
     # D[50:70,30:20,40:80]=500
     save_file_mask(data_filepath, output_filepath, mask_path)
+'''

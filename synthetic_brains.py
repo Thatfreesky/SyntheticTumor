@@ -70,8 +70,8 @@ class Brain(object):
         if not os.path.isdir(join(brain_components_path, 'label_temp')):
             os.mkdir(join(brain_components_path, 'label_temp'))
 
-        command = 'fast -S 1 -t 1 -o ' + join(brain_components_path, 'maps') + ' -n 3 ' + join(self.path, self.T1)
-        command_label_4seg = 'fast -S 1 -t 1 -o ' + join(brain_components_path, 'label_temp/maps') + ' -n 4 ' + join(self.path, self.T1)
+        command = 'fast -S 1 -t 1 -o ' + join(brain_components_path, 'maps') + ' -n 3 ' + join(self.path, self.registered_dir, self.T1)
+        command_label_4seg = 'fast -S 1 -t 1 -o ' + join(brain_components_path, 'label_temp/maps') + ' -n 4 ' + join(self.path, self.registered_dir, self.T1)
 
         os.system(command)
         os.system(command_label_4seg)
@@ -95,7 +95,7 @@ class Brain(object):
         else:
             nii2mha = nii2mha_int
             rename = os.rename
-        temp_name = name2.replace('mha', '.nii.gz')
+        temp_name = name2.replace('.mha', '.nii.gz')
         rename(name1, temp_name)
         nii2mha(temp_name, name2)
 

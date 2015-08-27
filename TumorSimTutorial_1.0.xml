@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!-- This is an XML comment -->
+<!--
+Tutorial for specifying simulation parameters for the tumor simulation software
+ -->
+
+<!--
+We begin with a beginning element for the set of simulation parameters
+-->
+<tumor-simulation-parameters>
+
+<!-- The name of the dataset, will be used as prefix in the output files -->
+<dataset-name>SimTumor00T</dataset-name>
+
+<!--
+Input directory, the location of the uncompressed directory, obtained
+from TumorSimInput.zip
+For Windows, use something such as C:/scratch/TumorSim/TumorSimInput
+-->
+<input-directory>/home/local/USHERBROOKE/havm2701/Documents/TumorSim_experiment/TumorSim/TumorSimInput</input-directory>
+
+<!--
+Where to store all output files
+-->
+<output-directory>/home/local/USHERBROOKE/havm2701/Documents/TumorSim_experiment/Output00T</output-directory>
+
+<!--
+Location of the binary image containing the manually drawn tumor seed,
+must be in the same space as the anatomical labels in the input directory
+-->
+<deformation-seed>/home/local/USHERBROOKE/havm2701/Documents/TumorSim_experiment/TumorSim/seed5.mha</deformation-seed>
+
+<!--
+Parameters for mass effect simulation:
+the number of iterations,
+the initial pressure (in kPa),
+and the parameter kappa for the von Mises-Fisher random distribution
+  (larger kappa means smaller std dev)
+
+We recommend initial pressure values around 2 kPa for stability
+-->
+<deformation-iterations>10</deformation-iterations>
+<deformation-initial-pressure>2.5</deformation-initial-pressure>
+<deformation-kappa>80.0</deformation-kappa>
+
+<!--
+Parameters for the infiltration:
+the number of iterations,
+the time step (values <= 2.0 is recommended),
+and the early time that defines the starting point for edema
+  (smaller means edema will form most of the infiltration)
+-->
+<infiltration-iterations>60</infiltration-iterations>
+<infiltration-time-step>1.0</infiltration-time-step>
+<infiltration-early-time>2.0</infiltration-early-time>
+
+<!--
+Parameters for the application of infiltration body forces:
+the number of iterations,
+and the coefficient lambda where each force is -del(infiltration)*lambda
+
+lambda values between 5-10 generates moderate deformation
+-->
+<infiltration-body-force-iterations>2</infiltration-body-force-iterations>
+<infiltration-body-force-coefficient>5.0</infiltration-body-force-coefficient>
+
+<!-- Contrast enhancement type, can be: none, ring, or uniform -->
+<contrast-enhancement-type>uniform</contrast-enhancement-type>
+
+<!-- end of the simulation parameters element -->
+</tumor-simulation-parameters>
