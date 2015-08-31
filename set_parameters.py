@@ -7,6 +7,7 @@ from random import random
 import os
 from os.path import isdir
 from os import mkdir
+from os import listdir
 
 
 class PerBrain(object):
@@ -30,8 +31,8 @@ class WithinBrain(PerBrain):
     def generate_seed(self,):
         #data_filepath = join(self.input_directory, 'labels.mha')
         #mask_path = join(self.input_directory, 'labels.mha')
-        data_filepath = '/home/local/USHERBROOKE/havm2701/data/Synthetic_tumor_project/Synthetic_tumor/Final_tumorsim/Output00T/SimTumor00T_T1.mha'
-        mask_path = '/home/local/USHERBROOKE/havm2701/data/PPMI_test/3769_2012-01-11_301546_301547/Aligned/t1.nii.gz'
+        data_filepath = join(result_path, 'SimTumor00T_T1.mha')
+        mask_path = join(result_path, 't1.nii.gz')
         generate_seed_file(data_filepath, self.seed_path, mask_path)
 
     def image_parameters(self,):
@@ -73,7 +74,7 @@ class WithinBrain(PerBrain):
 
     def initiate(self, params):
 
-        self.xml_path = join('/home/local/USHERBROOKE/havm2701/data/Synthetic_tumor_project/Synthetic_tumor/EXPERIMENTS', self.identifier, 'TumorSim_params.xml')
+        self.xml_path = join(self.output_directory, 'TumorSim_params.xml')
         xmlfile_path = join(os.path.dirname(os.path.realpath(__file__)), 'SimTumor_configuration_template.xml')
         xml_empty = open(xmlfile_path).read()
         xml = xml_empty % params
@@ -83,20 +84,29 @@ class WithinBrain(PerBrain):
 
 if __name__ == "__main__":
     id_u = 'test'
-    input_directory = '/home/local/USHERBROOKE/havm2701/data/PPMI_processed_example/input'
-    output_directory = '/home/local/USHERBROOKE/havm2701/data/Synthetic_tumor_project/Synthetic_tumor/EXPERIMENTS'
-    brain_name = 'blabla'
+    HOME = os.environ['HOME']
+    brains_directory = join(HOME, 'data/PPMI_processed')
+    brain_names = listdir(brains_directory)
+    result_path = join(HOME, 'data/Synthetic_tumor_project/Synthetic_tumor/EXPERIMENTS')
 
-    # D.generate_seed()
+    len_brain_names = len(brain_names)
+    brain_names = brain_names[:len_brain_names / 2]
 
-    #from ipdb import set_trace
-    # set_trace()
-    for i in range(10):
-        id_u = str(i+10)
-        DD = WithinBrain(input_directory, brain_name, output_directory, id_u)
-        DD.generate_seed()
-        DD.tumor_parameters()
-        DD.initiate(DD.generate_tumor_parameters)
-        command = 'tumorsim ' + DD.xml_path
-        os.system(command)
-        del DD
+    for brain_name in brain_names:
+        input_directory = join(brains_directory, brain_name, 'input')
+        output_directory = join(result_path, brain_name)
+        if not isdir(output_directory):
+            mkdir(output_directory)
+        #brain_name = 'blabla'
+
+        # D.generate_seed()
+
+        for i in range(10):
+            id_u = str(i)
+            DD = WithinBrain(input_directory, brain_name, output_directory, id_u)
+            DD.generate_seed()
+            DD.tumor_parameters()
+            DD.initiate(DD.generate_tumor_parameters)
+            command = 'tumorsim ' + DD.xml_path
+            os.system(command)
+            del DD
