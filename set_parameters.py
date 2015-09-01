@@ -90,7 +90,8 @@ if __name__ == "__main__":
     result_path = join(HOME, 'data/Synthetic_tumor_project/Synthetic_tumor/EXPERIMENTS')
 
     len_brain_names = len(brain_names)
-    brain_names = brain_names[:len_brain_names / 2]
+
+    brain_names = brain_names[len_brain_names / 2:]
 
     for brain_name in brain_names:
         input_directory = join(brains_directory, brain_name, 'input')
