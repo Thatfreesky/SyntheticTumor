@@ -126,7 +126,7 @@ if __name__ == "__main__":
             DD.generate_seed()
             DD.tumor_parameters()
             DD.initiate(DD.generate_tumor_parameters)
-            command = 'tumorsim ' + DD.xml_path
+            command = 'taskset 01 tumorsim ' + DD.xml_path
             os.system(command)
             del DD
             cleanup(join(output_directory, id_u))
