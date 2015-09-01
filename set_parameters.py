@@ -82,6 +82,25 @@ class WithinBrain(PerBrain):
             File_xml_write.write(xml)
 
 
+def cleanup(path):
+    keep_tags = ['T1Gad.mha', 'T2.mha', 'T1.mha', 'T1Gad', 'T1Gad', 'T1Gad', '.xml', '.log', 'truth.mha', 'FLAIR.mha', 'seed.mha']
+    keep_files = []
+    import ipdb
+
+    for quary_file in listdir(path):
+        flag = False
+        for tag in keep_tags:
+            if tag in quary_file:
+                flag = True
+
+        if flag is True:
+            keep_files.append(quary_file)
+
+    ipdb.set_trace()
+    for r_file in listdir(path):
+        if r_file not in keep_files:
+            os.remove(join(path, r_file))
+
 if __name__ == "__main__":
     id_u = 'test'
     HOME = os.environ['HOME']
@@ -110,3 +129,4 @@ if __name__ == "__main__":
             command = 'tumorsim ' + DD.xml_path
             os.system(command)
             del DD
+            cleanup(join(output_directory, id_u))
