@@ -52,7 +52,7 @@ def convert_nii_2_mha(data_filepath, ref_filepath, output_filepath):  # for use 
 
 
 def changeheader_mha(data_filepath, ref_filepath, output_filepath):
-
+    from ipdb import set_trace;set_trace()
     image_type_read = itk.Image[itk.SS, 3]
     image_type_ref = itk.Image[itk.SS, 3]
 
